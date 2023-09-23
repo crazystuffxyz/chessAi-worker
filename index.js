@@ -1,13 +1,12 @@
 const currentVersion = '1.2.7'; // Sets the current version
+async function getText(file) {
+  let x = await fetch(file);
+  let y = await x.text();
+  return y;
+}
 function main() {
-var script = document.createElement('script');
-script.src = "https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.js";
-document.body.appendChild(script);
-script.onload = function(){
-var workerJSScript = document.createElement('script');
-workerJSScript.src = "https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js";
-document.body.appendChild(workerJSScript);
-workerJSScript.onload = function(){
+eval(getText("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.js"));
+eval(getText("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js"));
     var stockfishObjectURL;
     var engine = document.engine = {};
     var myVars = document.myVars = {};
@@ -605,8 +604,6 @@ workerJSScript.onload = function(){
             other(currentDelay);
         }
     }, 100);
-}
-}
 }
 var isThinking = false
 var canGo = true;
