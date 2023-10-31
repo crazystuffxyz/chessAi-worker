@@ -351,8 +351,8 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
 <label for="autoMove"> Enable auto move</label><br>
 <input type="number" id="timeDelay" name="timeDelay" min="0.1" value=0.1>
 <label for="timeDelay">Auto Run Delay (Seconds)</label>
-<input type="number" id="depth" name="timeDelay" min="0.1" value=0.1>
-<label for="timeDelay">Set Depth (Must be below 8000 and more than 0)</label>
+<input type="number" id="depth" name="depth" min="0.1" value=0.1>
+<label for="depth">Set Depth (Must be below 8000 and more than 0)</label>
 </div>`
             div.innerHTML = content;
             div.setAttribute('style','background-color:white; height:auto;');
