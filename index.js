@@ -272,7 +272,6 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
     myFunctions.loadChessEngine = function() {
         if(!stockfishObjectURL) {
             stockfishObjectURL = URL.createObjectURL(new Blob([code], {type: 'application/javascript'}));
-            console.log(JSON.stringify(GM_getResourceText('stockfish.js')));
         }
         console.log(stockfishObjectURL);
         if(stockfishObjectURL) {
@@ -290,7 +289,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
         console.log('loaded chess engine');
     }
 
-    var lastValue = 20;
+    var lastValue = 1;
     myFunctions.runChessEngine = function(depth){
         //var fen = myFunctions.rescan();
         var fen = $('wc-chess-board')[0].game.getFEN();
