@@ -291,7 +291,7 @@ var setDepth;
         console.log('loaded chess engine');
     }
 
-    var lastValue = 25;
+    var lastValue = 20;
     myFunctions.runChessEngine = function(depth){
         //var fen = myFunctions.rescan();
         var fen = $('wc-chess-board')[0].game.getFEN();
@@ -356,10 +356,10 @@ var setDepth;
 <label for="autoMove"> Enable auto move</label><br>
 <input type="number" id="timeDelay" name="timeDelay" min="0.1" value=0.1>
 <label for="timeDelay">Auto Run Delay (Seconds)</label><br>
-<input type="number" id="depth" name="depth" min="0.1" value=0.1>
+<input type="number" id="depth" name="depth" min="0.1" value=` + lastValue + `>
 <label for="depth">Set Depth (Must be below 8000 and more than 0)</label>
 <button onclick="setDepth(eval(document.querySelector('#depth').value))">Set Depth</button>
-</div>`
+</div>`;
             div.innerHTML = content;
             div.setAttribute('style','background-color:white; height:auto;');
             div.setAttribute('id','settingsContainer');
