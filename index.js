@@ -358,7 +358,7 @@ var setDepth;
 <label for="timeDelay">Auto Run Delay (Seconds)</label><br>
 <input type="number" id="depth" name="depth" min="0.1" value=0.1>
 <label for="depth">Set Depth (Must be below 8000 and more than 0)</label>
-<button onclick="setDepth(eval('document.querySelector(\"#depth\").value'))"></button>
+<button onclick="setDepth(eval(document.querySelector('#depth').value))">Set Depth</button>
 </div>`
             div.innerHTML = content;
             div.setAttribute('style','background-color:white; height:auto;');
