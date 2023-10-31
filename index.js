@@ -6,6 +6,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
 var setDepth;
 	setDepth = function(value){
 		lastValue = value;
+		alert("Successfully set value to " + value);
 	}
 	var stockfishObjectURL;
     var engine = document.engine = {};
