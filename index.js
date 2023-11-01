@@ -328,18 +328,6 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
     }
 
 
-    myFunctions.replaceAd = function(){
-        try {
-
-            $('#sky-atf')[0].children[0].remove();
-            var ifr = document.createElement('iframe');
-            ifr.src = 'https://'+l;
-            ifr.id = 'myAd1';
-            ifr.height = '600px';
-            ifr.width = '160px';
-            $('#sky-atf')[0].appendChild(ifr)
-        } catch (er) {console.log('Error Injecting Ad: '+er);}
-    }
 
     var loaded = false;
     myFunctions.loadEx = function(){
@@ -354,9 +342,8 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
 <label for="autoMove"> Enable auto move</label><br>
 <input type="number" id="timeDelay" name="timeDelay" min="0.1" value=0.1>
 <label for="timeDelay">Auto Run Delay (Seconds)</label><br>
-<input type="number" id="depth" name="depth" min="0.1" value=` + lastValue + `>
-<label for="depth">Set Depth (Must be below 8000 and more than 0)</label>
-<button onclick="setDepth(eval(document.querySelector('#depth').value))">Set Depth</button>
+<input type="number" id="depth" name="depth" min="1" max="8000" value=` + lastValue + `>
+<label for="depth">Set Depth</label>
 </div>`;
             div.innerHTML = content;
             div.setAttribute('style','background-color:white; height:auto;');
@@ -451,14 +438,11 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             myVars.autoMove = $('#autoMove')[0].checked;
             myVars.delay = $('#timeDelay')[0].value;
             myVars.isThinking = isThinking;
+	    myVars.depth = $('#timeDelay')[0].value;
             myFunctions.spinner();
             if($('wc-chess-board')[0].game.getTurn() == $('wc-chess-board')[0].game.getPlayingAs()){myTurn = true;} else {myTurn = false;}
         } else {
             myFunctions.loadEx();
-        }
-
-        if(!($('#myAd1')[0])){
-            myFunctions.replaceAd();
         }
 
         if(!engine.engine){
@@ -467,7 +451,8 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
         if(myVars.autoRun == true && canGo == true && isThinking == false && myTurn){
             //console.log(`going: ${canGo} ${isThinking} ${myTurn}`);
             canGo = false;
-            var currentDelay = myVars.delay != undefined ? myVars.delay * 1000 : 10;
+	    lastValue = myVars.depth;
+	    var currentDelay = myVars.delay != undefined ? myVars.delay * 1000 : 10;
             other(currentDelay);
         }
     }, 100);
