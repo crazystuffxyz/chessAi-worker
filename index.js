@@ -438,7 +438,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             myVars.autoMove = $('#autoMove')[0].checked;
             myVars.delay = $('#timeDelay')[0].value;
             myVars.isThinking = isThinking;
-	    myVars.depth = $('#timeDelay')[0].value;
+	    myVars.depth = eval($('#depth')[0].value);
             myFunctions.spinner();
             if($('wc-chess-board')[0].game.getTurn() == $('wc-chess-board')[0].game.getPlayingAs()){myTurn = true;} else {myTurn = false;}
         } else {
@@ -451,7 +451,10 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
         if(myVars.autoRun == true && canGo == true && isThinking == false && myTurn){
             //console.log(`going: ${canGo} ${isThinking} ${myTurn}`);
             canGo = false;
+	    if(lastValue != myVars.depth){
 	    lastValue = myVars.depth;
+	    alert("Set value to " + lastValue);
+	    }
 	    var currentDelay = myVars.delay != undefined ? myVars.delay * 1000 : 10;
             other(currentDelay);
         }
