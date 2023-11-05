@@ -220,7 +220,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             .replace(/^g/, "7")
             .replace(/^h/, "8");
         $('wc-chess-board')
-            .prepend('<div class="highlight square-' + res2 + ' bro" style="background-color: rgb(235, 97, 80); opacity: 0.71;" data-test-element="highlight"></div>')
+            .prepend('<div class="highlight square-' + res2 + ' highlightMove" style="background-color: green; opacity: 0.71;" data-test-element="highlight"></div>')
             .children(':first')
             .delay(1800)
             .queue(function() {
@@ -228,7 +228,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
                 .remove();
         });
         $('wc-chess-board')
-            .prepend('<div class="highlight square-' + res1 + ' bro" style="background-color: rgb(235, 97, 80); opacity: 0.71;" data-test-element="highlight"></div>')
+            .prepend('<div class="highlight square-' + res1 + ' highlightMove" style="background-color: black; opacity: 0.71;" data-test-element="highlight"></div>')
             .children(':first')
             .delay(1800)
             .queue(function() {
@@ -346,7 +346,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
 <label for="depth">Set Depth</label>
 </div>`;
             div.innerHTML = content;
-            div.setAttribute('style','background-color:white; height:auto;');
+            div.setAttribute('style','background-color:black; height:auto; color: green');
             div.setAttribute('id','settingsContainer');
 
             $('wc-chess-board')[0].parentElement.parentElement.appendChild(div);
@@ -363,7 +363,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             height: 64px;
             width: 64px;
             animation: rotate 0.8s infinite linear;
-            border: 5px solid firebrick;
+            border: 5px solid green;
             border-right-color: transparent;
             border-radius: 50%;
             `);
@@ -387,20 +387,20 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             }
             #relEngBut {
             position: relative;
-			color: #ffef85;
-			background-color: #3cba2c;
+			color: #green;
+			background-color: black;
 			font-size: 19px;
-			border: 1px solid #000000;
+			border: 1px solid green;
 			padding: 15px 50px;
             letter-spacing: 1px;
 			cursor: pointer
 		    }
 		    #relEngBut:hover {
-			color: #000000;
-			background-color: #ba1212;
+			color: black;
+			background-color: green;
 		    }
             #relEngBut:active {
-            background-color: #ba1212;
+            background-color: black;
             transform: translateY(4px);
        }`;
             var reBut = `<button type="button" name="reloadEngine" id="relEngBut" onclick="document.myFunctions.reloadChessEngine()">Reload Chess Engine</button>`;
