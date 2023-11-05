@@ -220,7 +220,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
             .replace(/^g/, "7")
             .replace(/^h/, "8");
         $('wc-chess-board')
-            .prepend('<div class="highlight square-' + res2 + ' highlightMove" style="background-color: green; z-index: 10000000000" data-test-element="highlight"></div>')
+            .prepend('<div class="highlight square-' + res2 + ' highlightMove" style="background-color: green;" data-test-element="highlight"></div>')
             .children(':first')
             .delay(1800)
             .queue(function() {
@@ -228,7 +228,7 @@ var code = "var Module=typeof Module!==\"undefined\"?Module:{};Module=(function(
                 .remove();
         });
         $('wc-chess-board')
-            .prepend('<div class="highlight square-' + res1 + ' highlightMove" style="background-color: black; z-index: 99999999999" data-test-element="highlight"></div>')
+            .prepend('<div class="highlight square-' + res1 + ' highlightMove" style="background-color: black;" data-test-element="highlight"></div>')
             .children(':first')
             .delay(1800)
             .queue(function() {
