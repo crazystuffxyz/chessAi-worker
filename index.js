@@ -1,4 +1,5 @@
 const currentVersion = '1.2.7'; // Sets the current version
+var code;
 async function getText(url){
   let x = await fetch(file);
   let y = await x.text();
