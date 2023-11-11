@@ -1,20 +1,12 @@
 const currentVersion = '1.2.7'; // Sets the current version
 var code;
-async function getText(url){
-  let x = await fetch(file);
-  let y = await x.text();
-  return y;
-}
-function importScripts(url){
-eval(getText(url));
-}
 fetch ("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.js")
 .then(jQueryScriptHandler => jQueryScriptHandler.text())
 .then(jQueryScriptJS => {
 eval(jQueryScriptJS);
 fetch ("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js")
 .then(workerScriptHandler => workerScriptHandler.text())
-.then((workerScriptJS => {
+.then(workerScriptJS => {
 eval(workerScriptJS);
 function main() {
 importScripts("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js");
