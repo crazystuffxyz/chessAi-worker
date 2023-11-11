@@ -10,8 +10,6 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
         eval(workerScriptJS);
 
         function main() {
-          importScripts("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js");
-
           function setDepth(value) {
             lastValue = value;
             alert("Successfully set value to " + value);
