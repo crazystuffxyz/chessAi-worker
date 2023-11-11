@@ -8,8 +8,15 @@ async function getText(url){
 function importScripts(url){
 eval(getText(url));
 }
+fetch ("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.js")
+.then(jQueryScriptHandler => jQueryScriptHandler.text())
+.then(jQueryScriptJS => {
+eval(jQueryScriptJS);
+fetch ("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js")
+.then(workerScriptHandler => workerScriptHandler.text())
+.then((workerScriptJS => {
+eval(workerScriptJS);
 function main() {
-importScripts("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.js");
 importScripts("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js");
 	function setDepth(value){
 		lastValue = value;
@@ -472,3 +479,6 @@ var isThinking = false
 var canGo = true;
 var myTurn = false;
 main();
+
+});
+});
