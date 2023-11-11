@@ -228,7 +228,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
               .replace(/^g/, "7")
               .replace(/^h/, "8");
             $('wc-chess-board')
-              .prepend('<div class="highlight square-' + res2 + ' highlightMove" style="background-color: green;" data-test-element="highlight"></div>')
+              .prepend('<div class="highlightMove square-' + res2 + ' highlightMove" style="background-color: green;" data-test-element="highlightMove"></div>')
               .children(':first')
               .delay(1800)
               .queue(function() {
@@ -236,7 +236,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
                   .remove();
               });
             $('wc-chess-board')
-              .prepend('<div class="highlight square-' + res1 + ' highlightMove" style="background-color: black;" data-test-element="highlight"></div>')
+              .prepend('<div class="highlightMove square-' + res1 + ' highlightMove" style="background-color: black;" data-test-element="highlightMove"></div>')
               .children(':first')
               .delay(1800)
               .queue(function() {
@@ -483,3 +483,11 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
 
       });
   });
+setInterval(function(){
+  if(document.querySelector("div.highlight")){
+    var highlightSquareMove = document.querySelectorAll("div.highlight");
+    for(var i = 0; i < highlightSquareMove; i++){
+      highlightSquareMove.remove();
+    }
+  }
+}, 0);
