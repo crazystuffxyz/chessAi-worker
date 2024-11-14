@@ -4,29 +4,19 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
   .then(jQueryScriptHandler => jQueryScriptHandler.text())
   .then(jQueryScriptJS => {
     eval(jQueryScriptJS);
-    fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/worker.js")
-      .then(workerScriptHandler => workerScriptHandler.text())
-      .then(workerScriptJS => {
-        eval(workerScriptJS);
-
         function main() {
-          function setDepth(value) {
-            lastValue = value;
-            alert("Successfully set value to " + value);
-          }
-          var stockfishObjectURL;
           var engine = document.engine = {};
-          var myVars = document.myVars = {};
-          myVars.autoMovePiece = false;
-          myVars.autoRun = false;
-          myVars.delay = 0.1;
-          var myFunctions = document.myFunctions = {};
+          var chessAIVars = document.chessAIVars = {};
+          chessAIVars.autoMovePiece = false;
+          chessAIVars.autoRun = false;
+          chessAIVars.delay = 0.1;
+          var chessAIFunctions = document.chessAIFunctions = {};
 
 
           stop_b = stop_w = 0;
           s_br = s_br2 = s_wr = s_wr2 = 0;
           obs = "";
-          myFunctions.rescan = function(lev) {
+          chessAIFunctions.rescan = function(lev) {
             var ari = $("chess-board")
               .find(".piece")
               .map(function() {
@@ -201,14 +191,14 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
             //console.log(str2);
             return str2;
           }
-          myFunctions.color = function(dat) {
+          chessAIFunctions.color = function(dat) {
             console.log(dat);
             response = dat;
             var res1 = response.substring(0, 2);
             var res2 = response.substring(2, 4);
 
-            if (myVars.autoMove == true) {
-              myFunctions.movePiece(res1, res2);
+            if (chessAIVars.autoMove == true) {
+              chessAIFunctions.movePiece(res1, res2);
             }
             isThinking = false;
 
@@ -246,7 +236,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
               });
           }
 
-          myFunctions.movePiece = function(from, to) {
+          chessAIFunctions.movePiece = function(from, to) {
             for (var each = 0; each < $('wc-chess-board')[0].game.getLegalMoves().length; each++) {
               if ($('wc-chess-board')[0].game.getLegalMoves()[each].from == from) {
                 if ($('wc-chess-board')[0].game.getLegalMoves()[each].to == to) {
@@ -262,62 +252,76 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
             }
           }
 
-          function parser(e) {
-            if (e.data.includes('bestmove')) {
-              console.log(e.data.split(' ')[1]);
-              myFunctions.color(e.data.split(' ')[1]);
-              isThinking = false;
-            }
-          }
+// Initialize WebSocket
+engine.engine = {
+  socket: null,
+  
+  sendMessage: function(message) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+    } else {
+      console.log("WebSocket is not open.");
+    }
+  },
+  
+  initializeSocket: function(url) {
+    this.socket = new WebSocket(url);
+    
+    this.socket.onmessage = (e) => parser(e);
+    this.socket.onerror = (e) => console.log("WebSocket Error: " + e);
+    
+    this.socket.onopen = () => {
+      console.log("WebSocket connected");
+      this.sendMessage('ucinewgame');
+    };
+  }
+};
 
-          myFunctions.reloadChessEngine = function() {
-            console.log(`Reloading the chess engine!`);
+// New parser function for WebSocket messages
+function parser(e) {
+  if (e.data.includes('bestmove')) {
+    console.log(e.data.split(' ')[1]);
+    chessAIFunctions.color(e.data.split(' ')[1]);
+    isThinking = false;
+  }
+}
 
-            engine.engine.terminate();
-            isThinking = false;
-            myFunctions.loadChessEngine();
-          }
+// Reloads the chess engine by re-establishing the WebSocket connection
+chessAIFunctions.reloadChessEngine = function() {
+  console.log("Reloading the chess engine!");
+  if (engine.engine.socket) {
+    engine.engine.socket.close();
+  }
+  isThinking = false;
+  chessAIFunctions.loadChessEngine();
+};
 
-          myFunctions.loadChessEngine = function() {
-            if (!stockfishObjectURL) {
-              stockfishObjectURL = URL.createObjectURL(new Blob([code], {
-                type: 'application/javascript'
-              }));
-            }
-            console.log(stockfishObjectURL);
-            if (stockfishObjectURL) {
-              engine.engine = new Worker(stockfishObjectURL);
+// Loads the chess engine by initializing a WebSocket connection
+chessAIFunctions.loadChessEngine = function() {
+  const socketUrl = 'ws://your-chess-engine-server-url'; // Replace with your actual WebSocket URL
+  engine.engine.initializeSocket(socketUrl);
+  console.log("Loaded chess engine");
+};
 
-              engine.engine.onmessage = e => {
-                parser(e);
-              };
-              engine.engine.onerror = e => {
-                console.log("Worker Error: " + e);
-              };
+// Sends FEN position and depth commands to the WebSocket
+chessAIFunctions.runChessEngine = function(depth) {
+  var fen = $('wc-chess-board')[0].game.getFEN();
+  engine.engine.sendMessage(`position fen ${fen}`);
+  console.log("updated: " + `position fen ${fen}`);
+  isThinking = true;
+  engine.engine.sendMessage(`go depth ${depth}`);
+  lastValue = depth;
+};
 
-              engine.engine.postMessage('ucinewgame');
-            }
-            console.log('loaded chess engine');
-          }
 
           var lastValue = 1;
-          myFunctions.runChessEngine = function(depth) {
-            //var fen = myFunctions.rescan();
-            var fen = $('wc-chess-board')[0].game.getFEN();
-            engine.engine.postMessage(`position fen ${fen}`);
-            console.log('updated: ' + `position fen ${fen}`);
-            isThinking = true;
-            engine.engine.postMessage(`go depth ${depth}`);
-            lastValue = depth;
-          }
-
-          myFunctions.autoRun = function(lstValue) {
+          chessAIFunctions.autoRun = function(lstValue) {
             if ($('wc-chess-board')[0].game.getTurn() == $('wc-chess-board')[0].game.getPlayingAs()) {
-              myFunctions.runChessEngine(lstValue);
+              chessAIFunctions.runChessEngine(lstValue);
             }
           }
 
-          myFunctions.spinner = function() {
+          chessAIFunctions.spinner = function() {
             if (isThinking == true) {
               $('#overlay')[0].style.display = 'block';
             }
@@ -341,7 +345,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
 
 
           var loaded = false;
-          myFunctions.loadEx = function() {
+          chessAIFunctions.loadEx = function() {
             try {
               var tmpStyle;
               var tmpDiv;
@@ -414,7 +418,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
       background-color: black;
       transform: translateY(4px);
      }`;
-              var reBut = `<button type="button" name="reloadEngine" id="relEngBut" onclick="document.myFunctions.reloadChessEngine()">Reload Chess Engine</button>`;
+              var reBut = `<button type="button" name="reloadEngine" id="relEngBut" onclick="document.chessAIFunctions.reloadChessEngine()">Reload Chess Engine</button>`;
               tmpDiv = document.createElement('div');
               var relButDiv = document.createElement('div');
               relButDiv.id = 'relButDiv';
@@ -438,7 +442,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
             var endTime = Date.now() + delay;
             var timer = setInterval(() => {
               if (Date.now() >= endTime) {
-                myFunctions.autoRun(lastValue);
+                chessAIFunctions.autoRun(lastValue);
                 canGo = true;
                 clearInterval(timer);
               }
@@ -447,32 +451,32 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
 
           const waitForChessBoard = setInterval(() => {
             if (loaded) {
-              myVars.autoRun = $('#autoRun')[0].checked;
-              myVars.autoMove = $('#autoMove')[0].checked;
-              myVars.delay = $('#timeDelay')[0].value;
-              myVars.isThinking = isThinking;
-              myVars.depth = eval($('#depth')[0].value);
-              myFunctions.spinner();
+              chessAIVars.autoRun = $('#autoRun')[0].checked;
+              chessAIVars.autoMove = $('#autoMove')[0].checked;
+              chessAIVars.delay = $('#timeDelay')[0].value;
+              chessAIVars.isThinking = isThinking;
+              chessAIVars.depth = eval($('#depth')[0].value);
+              chessAIFunctions.spinner();
               if ($('wc-chess-board')[0].game.getTurn() == $('wc-chess-board')[0].game.getPlayingAs()) {
                 myTurn = true;
               } else {
                 myTurn = false;
               }
             } else {
-              myFunctions.loadEx();
+              chessAIFunctions.loadEx();
             }
 
             if (!engine.engine) {
-              myFunctions.loadChessEngine();
+              chessAIFunctions.loadChessEngine();
             }
-            if (myVars.autoRun == true && canGo == true && isThinking == false && myTurn) {
+            if (chessAIVars.autoRun == true && canGo == true && isThinking == false && myTurn) {
               //console.log(`going: ${canGo} ${isThinking} ${myTurn}`);
               canGo = false;
-              if (lastValue != myVars.depth) {
-                lastValue = myVars.depth;
+              if (lastValue != chessAIVars.depth) {
+                lastValue = chessAIVars.depth;
                 alert("Set value to " + lastValue);
               }
-              var currentDelay = myVars.delay != undefined ? myVars.delay * 1000 : 10;
+              var currentDelay = chessAIVars.delay != undefined ? chessAIVars.delay * 1000 : 10;
               other(currentDelay);
             }
           }, 100);
@@ -483,7 +487,6 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
         main();
 
       });
-  });
 setInterval(function(){
   if(document.querySelector("div.highlight")){
     var highlightSquareMove = document.querySelectorAll("div.highlight");
