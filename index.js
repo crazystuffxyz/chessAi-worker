@@ -202,6 +202,7 @@ fetch("https://raw.githubusercontent.com/crazystuffofficial/chessAi/main/jQuery.
             return str2;
           }
           myFunctions.color = function(dat) {
+            console.log(dat);
             response = dat;
             var res1 = response.substring(0, 2);
             var res2 = response.substring(2, 4);
